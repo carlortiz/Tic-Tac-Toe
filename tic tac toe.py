@@ -61,7 +61,7 @@ class Player:
             player.symbol = player.get_symbol()
         else:
             if Player.players[0].symbol == "X":
-                player.symbol == "O"
+                player.symbol = "O"
 
 
         Player.players.append(player)
