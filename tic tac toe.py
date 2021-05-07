@@ -62,8 +62,10 @@ class Player:
         else:
             if Player.players[0].symbol == "X":
                 player.symbol = "O"
+            else:
+                player.symbol = "X"
 
-
+        print("Okay, your symbol is ", player.symbol)
         Player.players.append(player)
         return player
 
@@ -111,7 +113,13 @@ while True:
         print("Only 'single' or double' allowed.")
 
 current_player = Player.players[0]
+turns_count = 0
+
 while not game_over:
+    if turns_count == 9:
+        print("Draw, there is no winner!")
+        game_over = True
+        break
 
     board = Board()
     board.display()
@@ -133,3 +141,5 @@ while not game_over:
         current_player = Player.players[1]
     elif current_player == Player.players[1]:
         current_player = Player.players[0]
+
+    turns_count += 1
