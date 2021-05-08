@@ -45,6 +45,18 @@ class Board:
             return True
         return False
 
+    @staticmethod
+    def check_if_empty(box):
+        if box == " ":
+            return True
+        return False
+
+    @staticmethod
+    def check_box_number(number):
+        if number > 9 or number < 1:
+            return True
+        return False
+
 
 class Player:
     players = []
@@ -77,7 +89,8 @@ class Player:
                 break
         return chosen_symbol.upper()
 
-    def set_symbol(self):
+    @staticmethod
+    def set_symbol():
         if Player.players[0].symbol == "X":
             return "O"
         return "X"
@@ -86,6 +99,12 @@ class Player:
     def player_turn():
         chosen_box = int(input("Choose box (1-9): "))
         return chosen_box - 1
+
+    def switch_players(self):
+        if self == Player.players[0]:
+            return Player.players[1]
+        elif self == Player.players[1]:
+            return Player.players[0]
 
 
 # GAME STARTS HERE
@@ -110,9 +129,9 @@ while True:
 
 current_player = Player.players[0]
 turns_count = 0
+board = Board()
 
 while not game_over:
-    board = Board()
     board.display()
 
     if turns_count == MAX_TURNS:
@@ -123,26 +142,25 @@ while not game_over:
     print("Okay ", current_player.name, ",it is now your turn.")
     while True:
         box_number = current_player.player_turn()
-        box = board.boxes[box_number]
+        if Board.check_box_number(box_number):
+            print("You must choose a number between 1-9.")
+            continue
 
-        if box != "X" and box != "O":
-            box = current_player.symbol
+        selected_box = board.boxes[box_number]
+        if Board.check_if_empty(selected_box):
+            selected_box = current_player.symbol
+            print(selected_box)
             break
         print("You must choose an empty box.")
 
     print("The player ", current_player.name, " marked box #", box_number + 1)
 
     current_player.is_winner = Board.check_winner()
-
     if current_player.is_winner:
         game_over = True
         print("\n*", current_player.name, " is the winner!!!")
         Board.display()
         break
 
-    if current_player == Player.players[0]:
-        current_player = Player.players[1]
-    elif current_player == Player.players[1]:
-        current_player = Player.players[0]
-
+    current_player = current_player.switch_players()
     turns_count += 1
