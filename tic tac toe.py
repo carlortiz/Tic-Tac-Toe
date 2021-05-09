@@ -7,14 +7,13 @@ class Board:
              " ", " ", " ",
              " ", " ", " "]
 
-    @classmethod
-    def display(cls):
+    def display(self):
         print("\nBoard:")
-        print(cls.boxes[0], "|", cls.boxes[1], "|", cls.boxes[2])
+        print(self.boxes[0], "|", self.boxes[1], "|", self.boxes[2])
         print("---------")
-        print(cls.boxes[3], "|", cls.boxes[4], "|", cls.boxes[5])
+        print(self.boxes[3], "|", self.boxes[4], "|", self.boxes[5])
         print("---------")
-        print(cls.boxes[6], "|", cls.boxes[7], "|", cls.boxes[8])
+        print(self.boxes[6], "|", self.boxes[7], "|", self.boxes[8])
 
     @classmethod
     def check_winner(cls):
@@ -106,6 +105,19 @@ class Player:
         elif self == Player.players[1]:
             return Player.players[0]
 
+class Robot(Player):
+
+    def __init__(self):
+        super().__init__()
+
+    @staticmethod
+    def get_name():
+        pass
+
+    @staticmethod
+    def player_turn():
+        pass
+
 
 # GAME STARTS HERE
 intro = input("Hello, welcome to tic tac toe!")
@@ -142,14 +154,12 @@ while not game_over:
     print("Okay ", current_player.name, ",it is now your turn.")
     while True:
         box_number = current_player.player_turn()
-        if Board.check_box_number(box_number):
+        if Board.check_box_number(box_number + 1):
             print("You must choose a number between 1-9.")
             continue
 
-        selected_box = board.boxes[box_number]
-        if Board.check_if_empty(selected_box):
-            selected_box = current_player.symbol
-            print(selected_box)
+        if Board.check_if_empty(board.boxes[box_number]):
+            board.boxes[box_number] = current_player.symbol
             break
         print("You must choose an empty box.")
 
@@ -158,8 +168,8 @@ while not game_over:
     current_player.is_winner = Board.check_winner()
     if current_player.is_winner:
         game_over = True
-        print("\n*", current_player.name, " is the winner!!!")
-        Board.display()
+        board.display()
+        print("*", current_player.name, " is the winner!!!")
         break
 
     current_player = current_player.switch_players()
