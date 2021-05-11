@@ -1,3 +1,5 @@
+import random
+
 MAX_TURNS = 9
 
 
@@ -96,7 +98,11 @@ class Player:
 
     @staticmethod
     def player_turn():
-        chosen_box = int(input("Choose box (1-9): "))
+        while True:
+            chosen_box = int(input("Choose box (1-9): "))
+            if isinstance(chosen_box, int):
+                break
+
         return chosen_box - 1
 
     def switch_players(self):
@@ -105,6 +111,7 @@ class Player:
         elif self == Player.players[1]:
             return Player.players[0]
 
+
 class Robot(Player):
 
     def __init__(self):
@@ -112,11 +119,13 @@ class Robot(Player):
 
     @staticmethod
     def get_name():
-        pass
+        given_name = input("Enter your opponent's name: ")
+        return given_name.upper()
 
     @staticmethod
     def player_turn():
-        pass
+        chosen_box = random.randint(1, 9)
+        return chosen_box - 1
 
 
 # GAME STARTS HERE
@@ -130,6 +139,7 @@ while True:
     if game_mode == "single":
         print("\nOkay, single player it is!")
         player_one = Player()
+        player_two = Robot()
         break
     elif game_mode == "double":
         print("\nOkay, double player it is!")
@@ -151,7 +161,7 @@ while not game_over:
         game_over = True
         break
 
-    print("Okay ", current_player.name, ",it is now your turn.")
+    print("Okay ", current_player.name, ", it is now your turn.")
     while True:
         box_number = current_player.player_turn()
         if Board.check_box_number(box_number + 1):
@@ -169,7 +179,7 @@ while not game_over:
     if current_player.is_winner:
         game_over = True
         board.display()
-        print("*", current_player.name, " is the winner!!!")
+        print(current_player.name, " is the winner!!!")
         break
 
     current_player = current_player.switch_players()
